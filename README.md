@@ -1,1 +1,1 @@
-# graph_serach_algorithms
+# Graph Search Algorithms
