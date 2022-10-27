@@ -1,7 +1,7 @@
 import plotly.graph_objects as go
 
 
-class GraphAnimation():
+class GraphAnimator():
     def __init__(self, graph, start_node, goal_node, is_maze=False, maze_list=[], edge_weight=False):
         self.graph = graph
         self.start_node = start_node
@@ -11,7 +11,11 @@ class GraphAnimation():
         self.is_maze = is_maze
         self.maze_list = maze_list
         self.edge_weight = edge_weight
-        self.edge_list = [(0, 1, 3), (0, 2, 1), (1, 3, 5), (2, 4, 1), (2, 5, 4), (3, 6, 7), (4, 7, 1), (4, 8, 8), (5, 9, 2), (6, 10, 9), (8, 12, 8), (9, 13, 4),
+        self.edge_list = [
+            (0, 1, 3),
+            (0, 2, 1),
+            (1, 3, 5),
+            (2, 4, 1), (2, 5, 4), (3, 6, 7), (4, 7, 1), (4, 8, 8), (5, 9, 2), (6, 10, 9), (8, 12, 8), (9, 13, 4),
                  (10, 11, 1), (11, 12, 8), (7, 11, 1)]
 
 
@@ -19,8 +23,8 @@ class GraphAnimation():
         edge_x = []
         edge_y = []
         for edge in self.graph.edges():
-            x0, y0 = self.graph.nodes[edge[0]]['pos']
-            x1, y1 = self.graph.nodes[edge[1]]['pos']
+            x0, y0 = self.graph.nodes[edge[0]]['position']
+            x1, y1 = self.graph.nodes[edge[1]]['position']
             edge_x.append(x0)
             edge_x.append(x1)
             edge_x.append(None)
@@ -42,7 +46,7 @@ class GraphAnimation():
         node_x = []
         node_y = []
         for node in self.graph.nodes():
-            x, y = self.graph.nodes[node]['pos']
+            x, y = self.graph.nodes[node]['position']
             node_x.append(x)
             node_y.append(y)
 
@@ -80,8 +84,8 @@ class GraphAnimation():
         edge_x, edge_y = [], []
         while node_to is not self.start_node:
             node_from = came_from[node_to]
-            x0, y0 = self.graph.nodes[node_from]['pos']
-            x1, y1 = self.graph.nodes[node_to]['pos']
+            x0, y0 = self.graph.nodes[node_from]['position']
+            x1, y1 = self.graph.nodes[node_to]['position']
             edge_x.append(x0)
             edge_x.append(x1)
             edge_x.append(None)
