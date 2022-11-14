@@ -97,5 +97,3 @@ graph_animator = GraphAnimator(graph, start_node, goal_node, is_maze=True, maze_
 
 # A* algorithm on large graph
 find_path(graph, start_node, goal_node, 'AStarQueue', graph_animator)
-
-<iframe src="https://github.com/antontmur/graph_search_algorithms/blob/master/animations/dfs.html"></iframe>
