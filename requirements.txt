@@ -1,2 +1,4 @@
 networkx == 2.8.7
 plotly == 5.10.0
+dash == 2.6.2
+pandas == 1.5.1

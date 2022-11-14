@@ -17,7 +17,7 @@ def find_path(
         animator: GraphAnimator
     ):
     """
-        Universal function for traversing graph searching the path from start_node to goal_node.
+        Universal algorithm for traversing graph searching the path from start_node to goal_node.
         It uses graph structure and the auxilary node storage structure.
         The animator is used to create animations of the search process.
     """
@@ -36,7 +36,7 @@ def find_path(
     # place the start node to the storage
     nodes_storage.insert(start_node)
     dist[start_node] = 0
-    animator.add_frame(color, parent, start_node)
+    animator.add_frame(color, parent, start_node, nodes_storage)
 
     # Loop until there are nodes in storage
     while not nodes_storage.empty():
@@ -45,13 +45,13 @@ def find_path(
         if current_node == goal_node:
             # End of the search, the goal is found.
             print_path(goal_node, parent)
-            animator.add_frame(color, parent, current_node)
+            animator.add_frame(color, parent, current_node, nodes_storage)
             break
 
         # take all the neighbours of the current node
         neighbours = list(graph.adj[current_node])
         for node_to_go in neighbours:
-            if color[node_to_go] == 'white':            # if this neighbour is new
+            if color[node_to_go] == 'white':            # if this neighbour is new to us
                 color[node_to_go] = 'grey'              # paint in grey
                 nodes_storage.insert(node_to_go)        # add to node storage
                 parent[node_to_go] = current_node       # saving the parent (where we came from)
@@ -66,20 +66,22 @@ def find_path(
 
         # painting the current node in black, we won't come back here
         color[current_node] = 'black'
-        animator.add_frame(color, parent, current_node)
+        animator.add_frame(color, parent, current_node, nodes_storage)
+        # animator.make_frame_with_storage(color, parent, current_node, nodes_storage)
 
-    fig = graph_animator.make_animation()
-    fig.show()
+    # fig = graph_animator.make_animation()
+    animator.make_animation_with_storage(color, parent, goal_node, nodes_storage)
+    # fig.show()
 
 
 # Building small simple graph
-# graph, start_node, goal_node = generate_simple_graph()
+graph, start_node, goal_node = generate_simple_graph()
 
 # Create helper class for pretty animations and make a first shot
-# graph_animator = GraphAnimator(graph, start_node, goal_node)
+graph_animator = GraphAnimator(graph, start_node, goal_node)
 
-# # DFS on simple graph
-# find_path(graph, start_node, goal_node, 'Stack', graph_animator)
+# DFS on simple graph
+find_path(graph, start_node, goal_node, 'Stack', graph_animator)
 
 # BFS on simple graph
 # find_path(graph, start_node, goal_node, 'Queue', graph_animator)
@@ -87,8 +89,7 @@ def find_path(
 # Dijkstra algorithm on simple graph
 # find_path(graph, start_node, goal_node, 'DijkstraQueue', graph_animator)
 
-graph, maze_list = generate_maze_graph()
-start_node, goal_node = 113, 198
+graph, start_node, goal_node, maze_list = generate_maze_graph()
 graph_animator = GraphAnimator(graph, start_node, goal_node, is_maze=True, maze_list=maze_list)
 
 # Dijkstra algorithm on large graph
@@ -96,3 +97,5 @@ graph_animator = GraphAnimator(graph, start_node, goal_node, is_maze=True, maze_
 
 # A* algorithm on large graph
 find_path(graph, start_node, goal_node, 'AStarQueue', graph_animator)
+
+<iframe src="https://github.com/antontmur/graph_search_algorithms/blob/master/animations/dfs.html"></iframe>

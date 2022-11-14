@@ -88,7 +88,7 @@ def generate_maze_graph():
     maze.add_nodes_from(node_list)
     maze.add_weighted_edges_from(edge_list)
 
-    return maze, maze_list
+    return maze, 113, 198, maze_list
 
 
 def print_path(goal_node, parent):
