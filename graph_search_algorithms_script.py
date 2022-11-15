@@ -53,9 +53,9 @@ def find_path(
         for node_to_go in neighbours:
             if color[node_to_go] == 'white':            # if this neighbour is new to us
                 color[node_to_go] = 'grey'              # paint in grey
-                nodes_storage.insert(node_to_go)        # add to node storage
                 parent[node_to_go] = current_node       # saving the parent (where we came from)
                 dist[node_to_go] = dist[current_node] + graph.get_edge_data(node_to_go, current_node)['weight']
+                nodes_storage.insert(node_to_go)  # add to node storage
             else:
                 # Otherwise we have to solve the conflict of duplicates
                 # comparing the distance from the current node to the neighbor
@@ -78,7 +78,7 @@ def find_path(
 graph, start_node, target_node = generate_simple_graph()
 
 # Create helper class for pretty animations and make a first shot
-graph_animator = GraphAnimator(graph, start_node, target_node, show_controls=True)
+# graph_animator = GraphAnimator(graph, start_node, target_node, show_controls=True)
 
 # DFS on simple graph
 # find_path(graph, start_node, target_node, 'Stack', graph_animator)
@@ -92,13 +92,12 @@ graph_animator = GraphAnimator(graph, start_node, target_node, show_controls=Tru
 # find_path(graph, start_node, target_node, 'DijkstraQueue', graph_animator)
 
 graph, start_node, target_node, maze_list = generate_maze_graph()
-
 graph_animator = GraphAnimator(graph, start_node, target_node,
                                is_maze=True, maze_list=maze_list,
                                show_datastructure=False)
 
 # Dijkstra algorithm on large graph
-find_path(graph, start_node, target_node, 'DijkstraQueue', graph_animator)
+# find_path(graph, start_node, target_node, 'DijkstraQueue', graph_animator)
 
 # A* algorithm on large graph
-# find_path(graph, start_node, target_node, 'AStarQueue', graph_animator)
+find_path(graph, start_node, target_node, 'AStarQueue', graph_animator)

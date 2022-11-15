@@ -101,7 +101,7 @@ class GraphAnimator():
                 showscale=False,
                 reversescale=True,
                 color=node_colors,
-                size=18 if self.is_maze else 35,
+                size=15 if self.is_maze else 35,
                 line_width=1 if self.is_maze else 2,
                 line=dict(color=THEMECOLORS['medium-grey'], width=0.5)),
             showlegend=False,
@@ -149,7 +149,8 @@ class GraphAnimator():
                                 fill="toself",
                                 fillcolor=THEMECOLORS['magenta'],
                                 line=dict(width=0.5, color=THEMECOLORS['light-magenta']),
-                                showlegend=False)
+                                showlegend=False,
+                                hoverinfo='none')
         return maze_trace
 
     def get_contour_trace(self, nodes_storage):
@@ -176,7 +177,10 @@ class GraphAnimator():
 
         y_coord = list(range(len(nodes_storage.nodes)))
         x_coord = [0] * len(nodes_storage.nodes)
-        nodes = nodes_storage.nodes
+        if isinstance(nodes_storage, DijkstraQueue) or isinstance(nodes_storage, AStarQueue):
+            nodes = [node[1] for node in nodes_storage.nodes]
+        else:
+            nodes = nodes_storage.nodes
         node_colors = [THEMECOLORS['light-grey']] * len(nodes)
         node_text_colors = [THEMECOLORS['white']] * len(nodes)
         for idx, node_id in enumerate(nodes):
@@ -200,7 +204,7 @@ class GraphAnimator():
                 line=dict(color=THEMECOLORS['light-grey'], width=0.5)),
             textposition="middle center",
             showlegend=False,
-            text=nodes_storage.nodes,
+            text=nodes,
             textfont=dict(family="arial",
                           size=10 if self.is_maze else 16,
                           color=node_text_colors))
@@ -406,6 +410,7 @@ class GraphAnimator():
                 "fill": maze_trace.fill,
                 "showlegend": maze_trace.showlegend,
                 "fillcolor": maze_trace.fillcolor,
+                "hoverinfo": maze_trace.hoverinfo,
                 "line": maze_trace.line
             }
             result_data.append(data_maze)
