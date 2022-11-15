@@ -12,12 +12,12 @@ from networkx import Graph
 def find_path(
         graph: Graph,
         start_node: int,
-        goal_node: int,
+        target_node: int,
         nodes_storage_structure_name: str,
         animator: GraphAnimator
     ):
     """
-        Universal algorithm for traversing graph searching the path from start_node to goal_node.
+        Universal algorithm for traversing graph searching the path from start_node to target_node.
         It uses graph structure and the auxilary node storage structure.
         The animator is used to create animations of the search process.
     """
@@ -30,7 +30,7 @@ def find_path(
         'Stack': Stack(),
         'Queue': Queue(),
         'DijkstraQueue': DijkstraQueue(dist),
-        'AStarQueue': AStarQueue(graph, dist, goal_node)
+        'AStarQueue': AStarQueue(graph, dist, target_node)
     }[nodes_storage_structure_name]
 
     # place the start node to the storage
@@ -39,12 +39,12 @@ def find_path(
     animator.add_frame(color, parent, start_node, nodes_storage)
 
     # Loop until there are nodes in storage
-    while not nodes_storage.empty():
+    while not nodes_storage.is_empty():
         current_node = nodes_storage.get_first()
 
-        if current_node == goal_node:
-            # End of the search, the goal is found.
-            print_path(goal_node, parent)
+        if current_node == target_node:
+            # End of the search, the target is found.
+            print_path(target_node, parent)
             animator.add_frame(color, parent, current_node, nodes_storage)
             break
 
@@ -70,30 +70,35 @@ def find_path(
         # animator.make_frame_with_storage(color, parent, current_node, nodes_storage)
 
     # fig = graph_animator.make_animation()
-    animator.make_animation_with_storage(color, parent, goal_node, nodes_storage)
+    animator.make_animation_with_storage(color, parent, target_node, nodes_storage)
     # fig.show()
 
 
 # Building small simple graph
-graph, start_node, goal_node = generate_simple_graph()
+graph, start_node, target_node = generate_simple_graph()
 
 # Create helper class for pretty animations and make a first shot
-graph_animator = GraphAnimator(graph, start_node, goal_node)
+graph_animator = GraphAnimator(graph, start_node, target_node, show_controls=True)
 
 # DFS on simple graph
-find_path(graph, start_node, goal_node, 'Stack', graph_animator)
+# find_path(graph, start_node, target_node, 'Stack', graph_animator)
 
 # BFS on simple graph
-# find_path(graph, start_node, goal_node, 'Queue', graph_animator)
+# find_path(graph, start_node, target_node, 'Queue', graph_animator)
 
 # Dijkstra algorithm on simple graph
-# find_path(graph, start_node, goal_node, 'DijkstraQueue', graph_animator)
+# graph_animator = GraphAnimator(graph, start_node, target_node,
+#                                show_edge_weight=True, show_controls=True)
+# find_path(graph, start_node, target_node, 'DijkstraQueue', graph_animator)
 
-graph, start_node, goal_node, maze_list = generate_maze_graph()
-graph_animator = GraphAnimator(graph, start_node, goal_node, is_maze=True, maze_list=maze_list)
+graph, start_node, target_node, maze_list = generate_maze_graph()
+
+graph_animator = GraphAnimator(graph, start_node, target_node,
+                               is_maze=True, maze_list=maze_list,
+                               show_datastructure=False)
 
 # Dijkstra algorithm on large graph
-# find_path(graph, start_node, goal_node, 'DijkstraQueue', graph_animator)
+find_path(graph, start_node, target_node, 'DijkstraQueue', graph_animator)
 
 # A* algorithm on large graph
-find_path(graph, start_node, goal_node, 'AStarQueue', graph_animator)
+# find_path(graph, start_node, target_node, 'AStarQueue', graph_animator)

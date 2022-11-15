@@ -8,10 +8,10 @@ import plotly.io as pio
 import networkx as nx
 
 THEMECOLORS = {
-    'background': '#1e1e1e',
+    'background': '#0e0e30',
     'dark-grey': '#252526',
     'medium-grey': '#2d2d2d',
-    'light-grey': '#3c3c3c',
+    'light-grey': '#4c4c4c',
     'blue': '#0079cc',
     'dark-blue': '#0065bb',
     'light-blue': '#569cd6',
@@ -23,7 +23,11 @@ THEMECOLORS = {
 }
 
 class GraphAnimator():
-    def __init__(self, graph, start_node, target_node, is_maze=False, maze_list=[], edge_weight=False):
+    def __init__(self, graph, start_node, target_node,
+                 is_maze=False, maze_list=[],
+                 show_controls=True,
+                 show_datastructure=True,
+                 show_edge_weight=False):
         self.graph = graph
         self.start_node = start_node
         self.target_node = target_node
@@ -31,13 +35,9 @@ class GraphAnimator():
         self.start_frame = None
         self.is_maze = is_maze
         self.maze_list = maze_list
-        self.edge_weight = edge_weight
-        self.edge_list = [
-            (0, 1, 3),
-            (0, 2, 1),
-            (1, 3, 5),
-            (2, 4, 1), (2, 5, 4), (3, 6, 7), (4, 7, 1), (4, 8, 8), (5, 9, 2), (6, 10, 9), (8, 12, 8), (9, 13, 4),
-                 (10, 11, 1), (11, 12, 8), (7, 11, 1)]
+        self.show_edge_weight = show_edge_weight
+        self.show_controls = show_controls
+        self.show_datastructure = show_datastructure
 
 
     def get_edge_trace(self):
@@ -86,7 +86,7 @@ class GraphAnimator():
                 node_text_colors[idx] = THEMECOLORS['black']
             elif c == 'grey':
                 node_colors[idx] = THEMECOLORS['light-grey']
-                node_text_colors[idx] = THEMECOLORS['blue']
+                node_text_colors[idx] = THEMECOLORS['white']
             elif c == 'black':
                 node_colors[idx] = THEMECOLORS['black']
                 node_text_colors[idx] = THEMECOLORS['blue']
@@ -143,9 +143,13 @@ class GraphAnimator():
         for i in range(len(self.maze_list)):
             for j in range(len(self.maze_list[0])):
                 if self.maze_list[i][j] == 1:
-                    ym.extend([rows - (i-0.5), rows - (i-0.5), rows - (i+0.5), rows - (i+0.5), None])
-                    xm.extend([j-0.5, j+0.5, j+0.5, j-0.5, None])
-        maze_trace = go.Scatter(x=xm, y=ym, fill="toself")
+                    ym.extend([rows - (i-0.5), rows - (i-0.5), rows - (i+0.5), rows - (i+0.5), rows - (i-0.5), None])
+                    xm.extend([j-0.5, j+0.5, j+0.5, j-0.5, j-0.5, None])
+        maze_trace = go.Scatter(x=xm, y=ym,
+                                fill="toself",
+                                fillcolor=THEMECOLORS['magenta'],
+                                line=dict(width=0.5, color=THEMECOLORS['light-magenta']),
+                                showlegend=False)
         return maze_trace
 
     def get_contour_trace(self, nodes_storage):
@@ -174,7 +178,7 @@ class GraphAnimator():
         x_coord = [0] * len(nodes_storage.nodes)
         nodes = nodes_storage.nodes
         node_colors = [THEMECOLORS['light-grey']] * len(nodes)
-        node_text_colors = [THEMECOLORS['blue']] * len(nodes)
+        node_text_colors = [THEMECOLORS['white']] * len(nodes)
         for idx, node_id in enumerate(nodes):
             if node_id == self.start_node:
                 node_colors[idx] = THEMECOLORS['light-blue']
@@ -212,6 +216,9 @@ class GraphAnimator():
         nodes_storage_trace = self.get_nodes_storage_trace(nodes_storage)
 
         new_frame = [edge_trace, path_trace, node_trace, contour_trace, nodes_storage_trace]
+        if self.is_maze:
+            maze_trace = self.get_maze_trace()
+            new_frame.append(maze_trace)
         self.frames.append(new_frame)
         return 0
 
@@ -386,7 +393,24 @@ class GraphAnimator():
                               "textfont": nodes_storage_trace.textfont,
                               }
 
-        return [edge_node, data_path, data_node, data_contour, data_nodes_storage]
+
+        result_data = [edge_node, data_path, data_node]
+        if self.show_datastructure:
+            result_data.extend([data_contour, data_nodes_storage])
+
+        if self.is_maze:
+            maze_trace = self.frames[frame_num][5]
+            data_maze = {
+                "x": list(maze_trace.x),
+                "y": list(maze_trace.y),
+                "fill": maze_trace.fill,
+                "showlegend": maze_trace.showlegend,
+                "fillcolor": maze_trace.fillcolor,
+                "line": maze_trace.line
+            }
+            result_data.append(data_maze)
+
+        return result_data
 
     def make_animation_with_storage(self, color, came_from, current_node, nodes_storage):
 
@@ -396,15 +420,21 @@ class GraphAnimator():
             "layout": {},
             "frames": []
         }
+        if self.show_datastructure:
+            fig_dict["layout"]["xaxis"] = {"showgrid": False, "zeroline": False, "showticklabels": False,
+                                           "anchor": 'y', "domain": [0.0, 0.75]}
+            fig_dict["layout"]["yaxis"] = {"showgrid": False, "zeroline": False, "showticklabels": False,
+                                           "anchor": 'x', "domain": [0.0, 1.0]}
+            fig_dict["layout"]["xaxis2"] = {"showgrid": False, "zeroline": False, "showticklabels": False,
+                                            "anchor": 'y2', "domain": [0.80, 1.0], "range": (-2., 2.)}
+            fig_dict["layout"]["yaxis2"] = {"showgrid": False, "zeroline": False, "showticklabels": False,
+                                            "anchor": 'x2', "domain": [0.0, 1.0], "range": (-2., 6.)}
+        else:
+            fig_dict["layout"]["xaxis"] = {"showgrid": False, "zeroline": False, "showticklabels": False,
+                                           "anchor": 'y', "domain": [0.0, 1.0]}
+            fig_dict["layout"]["yaxis"] = {"showgrid": False, "zeroline": False, "showticklabels": False,
+                                           "anchor": 'x', "domain": [0.0, 1.0]}
 
-        fig_dict["layout"]["xaxis"] = {"showgrid": False, "zeroline": False, "showticklabels": False,
-                                       "anchor": 'y', "domain": [0.0, 0.75]}
-        fig_dict["layout"]["yaxis"] = {"showgrid": False, "zeroline": False, "showticklabels": False,
-                                       "anchor": 'x', "domain": [0.0, 1.0]}
-        fig_dict["layout"]["xaxis2"] = {"showgrid": False, "zeroline": False, "showticklabels": False,
-                                        "anchor": 'y2', "domain": [0.80, 1.0], "range": (-2., 2.)}
-        fig_dict["layout"]["yaxis2"] = {"showgrid": False, "zeroline": False, "showticklabels": False,
-                                        "anchor": 'x2', "domain": [0.0, 1.0], "range": (-2., 6.)}
         fig_dict["layout"]["margin"] = dict(l=0, r=0, b=0, t=0)
 
         fig_dict["layout"]["plot_bgcolor"] = THEMECOLORS['background']
@@ -443,8 +473,8 @@ class GraphAnimator():
                      "showarrow": True,
                      }
 
-        start_node_text_coordinates = (-2., 9.) if self.is_maze else (17., 20.5)
-        target_node_text_coordinates = (22., 4.) if self.is_maze else (2., -1.)
+        start_node_text_coordinates = (-2., 9.) if self.is_maze else (17.5, 20.)
+        target_node_text_coordinates = (22., 4.) if self.is_maze else (2.5, -1.)
         start_node_text = {"align": 'left',
                            "font": {"color": THEMECOLORS['light-blue'], "size": 25},
                            "text": "start",
@@ -454,49 +484,52 @@ class GraphAnimator():
                            "showarrow": False
                            }
         target_node_text = {"align": 'left',
-                          "font": {"color": THEMECOLORS['green'], "size": 25},
-                          "text": "target",
-                          "x": target_node_text_coordinates[0],
-                          "y": target_node_text_coordinates[1],
-                          "xref": "x", "yref": "y",
-                          "showarrow": False
-                          }
+                            "font": {"color": THEMECOLORS['green'], "size": 25},
+                            "text": "target",
+                            "x": target_node_text_coordinates[0],
+                            "y": target_node_text_coordinates[1],
+                            "xref": "x", "yref": "y",
+                            "showarrow": False
+                            }
+        fig_dict["layout"]["annotations"] = [start_node_text, target_node_text]
 
-        fig_dict["layout"]["annotations"] = [storage_name, arrow_in, arrow_out, start_node_text, target_node_text]
+        if self.show_datastructure:
+            fig_dict["layout"]["annotations"].extend([storage_name, arrow_in, arrow_out])
 
         # edge annotations
-        if not self.is_maze:
-            edges = list(self.graph.edges)
-            weight_by_edge = nx.get_edge_attributes(self.graph, 'weight')
-            edge_annotations = []
-            for edge in edges:
-                x_start, y_start = self.graph.nodes[edge[0]]['position']
-                x_end, y_end = self.graph.nodes[edge[1]]['position']
+        if self.show_edge_weight:
+            if not self.is_maze:
+                edges = list(self.graph.edges)
+                weight_by_edge = nx.get_edge_attributes(self.graph, 'weight')
+                edge_annotations = []
+                for edge in edges:
+                    x_start, y_start = self.graph.nodes[edge[0]]['position']
+                    x_end, y_end = self.graph.nodes[edge[1]]['position']
 
-                if y_start == y_end:
-                    x_text = (x_start + x_end) / 2
-                    y_text = (y_start + y_end) / 2 + 0.5
-                elif x_start == x_end:
-                    x_text = (x_start + x_end) / 2 + 0.5
-                    y_text = (y_start + y_end) / 2
-                elif (x_end - x_start) * (y_end - y_start) > 0:
-                    x_text = (x_start + x_end) / 2 - 0.5
-                    y_text = (y_start + y_end) / 2 + 0.5
-                else:
-                    x_text = (x_start + x_end) / 2 + 0.5
-                    y_text = (y_start + y_end) / 2 + 0.5
+                    if y_start == y_end:
+                        x_text = (x_start + x_end) / 2
+                        y_text = (y_start + y_end) / 2 + 0.7
+                    elif x_start == x_end:
+                        x_text = (x_start + x_end) / 2 + 0.5
+                        y_text = (y_start + y_end) / 2
+                    elif (x_end - x_start) * (y_end - y_start) > 0:
+                        x_text = (x_start + x_end) / 2 - 0.5
+                        y_text = (y_start + y_end) / 2 + 0.5
+                    else:
+                        x_text = (x_start + x_end) / 2 + 0.5
+                        y_text = (y_start + y_end) / 2 + 0.5
 
-                edge_weight_text = {"align": 'left',
-                                    "font": {"color": THEMECOLORS['light-grey'], "size": 15},
-                                    "text": str(weight_by_edge[edge]),
-                                    "x": x_text,
-                                    "y": y_text,
-                                    "xref": "x", "yref": "y",
-                                    "showarrow": False
-                                    }
-                edge_annotations.append(edge_weight_text)
+                    edge_weight_text = {"align": 'left',
+                                        "font": {"color": THEMECOLORS['light-grey'], "size": 18},
+                                        "text": str(weight_by_edge[edge]),
+                                        "x": x_text,
+                                        "y": y_text,
+                                        "xref": "x", "yref": "y",
+                                        "showarrow": False
+                                        }
+                    edge_annotations.append(edge_weight_text)
 
-            fig_dict["layout"]["annotations"].extend(edge_annotations)
+                fig_dict["layout"]["annotations"].extend(edge_annotations)
 
 
         # make data
@@ -540,38 +573,40 @@ class GraphAnimator():
                 "label": frame_num,
                 "method": "animate"}
             sliders_dict["steps"].append(slider_step)
-        fig_dict["layout"]["updatemenus"] = [
-            {
-                "buttons": [
-                    {
-                        "args": [None, {"frame": {"duration": 500, "redraw": False},
-                                        "fromcurrent": True, "transition": {"duration": 300,
-                                                                            "easing": "quadratic-in-out"}}],
-                        "label": "Play",
-                        "method": "animate",
-                    },
-                    {
-                        "args": [[None], {"frame": {"duration": 0, "redraw": False},
-                                          "mode": "immediate",
-                                          "transition": {"duration": 0}}],
-                        "label": "Pause",
-                        "method": "animate"
-                    }
-                ],
-                "direction": "left",
-                "pad": {"r": 10, "t": 87},
-                "showactive": False,
-                "type": "buttons",
-                "x": 0.1,
-                "xanchor": "right",
-                "y": 0,
-                "yanchor": "top",
-                "bordercolor": THEMECOLORS['blue'],
-                "bgcolor": THEMECOLORS['dark-grey'],
-            }
-        ]
 
-        fig_dict["layout"]["sliders"] = [sliders_dict]
+        if self.show_controls:
+            fig_dict["layout"]["updatemenus"] = [
+                {
+                    "buttons": [
+                        {
+                            "args": [None, {"frame": {"duration": 500, "redraw": False},
+                                            "fromcurrent": True, "transition": {"duration": 300,
+                                                                                "easing": "quadratic-in-out"}}],
+                            "label": "Play",
+                            "method": "animate",
+                        },
+                        {
+                            "args": [[None], {"frame": {"duration": 0, "redraw": False},
+                                              "mode": "immediate",
+                                              "transition": {"duration": 0}}],
+                            "label": "Pause",
+                            "method": "animate"
+                        }
+                    ],
+                    "direction": "left",
+                    "pad": {"r": 10, "t": 87},
+                    "showactive": False,
+                    "type": "buttons",
+                    "x": 0.1,
+                    "xanchor": "right",
+                    "y": 0,
+                    "yanchor": "top",
+                    "bordercolor": THEMECOLORS['blue'],
+                    "bgcolor": THEMECOLORS['dark-grey'],
+                }
+            ]
+
+            fig_dict["layout"]["sliders"] = [sliders_dict]
 
         fig = go.Figure(fig_dict)
         fig.show()

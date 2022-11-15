@@ -21,7 +21,7 @@ class AbstractNodeStorageClass(ABC):
         pass
 
     @abstractmethod
-    def empty(self):
+    def is_empty(self):
         pass
 
 
@@ -38,7 +38,7 @@ class Stack(AbstractNodeStorageClass):
     def insert(self, node_number):
         self.nodes.append(node_number)
 
-    def empty(self):
+    def is_empty(self):
         return len(self.nodes) == 0
 
 
@@ -56,7 +56,7 @@ class Queue(AbstractNodeStorageClass):
     def insert(self, node_number):
         self.nodes.append(node_number)
 
-    def empty(self):
+    def is_empty(self):
         return len(self.nodes) == 0
 
 
@@ -64,7 +64,7 @@ class DijkstraQueue(AbstractNodeStorageClass):
     """
         Priority queue for Dijkstra's method.
         In the get_first() method, it selects a node,
-        with a minimal distance from the starting node.
+        with a minimal distance from the start node.
     """
 
     def __init__(self, distances):
@@ -73,13 +73,13 @@ class DijkstraQueue(AbstractNodeStorageClass):
 
     def get_first(self):
 
-        # distances from start to nodes in Q
+        # distances from start to nodes in nodes storage
         node_distances = [
             self.distances[node] for node in self.nodes
             if self.distances[node] != float('Inf')
         ]
 
-        # find closest node (with minimum distance) among all nodes in Q
+        # find closest node (with minimum distance) among all nodes in nodes storage
         min_distance = min(node_distances)
         min_index = node_distances.index(min_distance)
         closest_node = self.nodes[min_index]
@@ -91,7 +91,7 @@ class DijkstraQueue(AbstractNodeStorageClass):
     def insert(self, element):
         self.nodes.append(element)
 
-    def empty(self):
+    def is_empty(self):
         return len(self.nodes) == 0
 
 
@@ -118,7 +118,7 @@ class AStarQueue(AbstractNodeStorageClass):
 
     def get_first(self):
 
-        # calculate metrics for every node in Q
+        # calculate metrics for every node in nodes storage
         # metrics = distance from start + heuristically estimated distance to goal
         node_metrics = [
             self.distances[node] + self.calc_heuristic(node)
@@ -126,7 +126,7 @@ class AStarQueue(AbstractNodeStorageClass):
             if self.distances[node] != float('Inf')
         ]
 
-        # find optimal node (with minimum metrics) among all nodes in Q
+        # find optimal node (with minimum metrics) among all nodes in nodes storage
         min_metrics = min(node_metrics)
         min_index = node_metrics.index(min_metrics)
         optimal_node = self.nodes[min_index]
@@ -137,5 +137,5 @@ class AStarQueue(AbstractNodeStorageClass):
     def insert(self, element):
         self.nodes.append(element)
 
-    def empty(self):
+    def is_empty(self):
         return len(self.nodes) == 0
