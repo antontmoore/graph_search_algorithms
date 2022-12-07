@@ -1,10 +1,8 @@
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 from data_structures import Stack
-from data_structures import Queue
 from data_structures import DijkstraQueue
 from data_structures import AStarQueue
-import plotly.io as pio
 import networkx as nx
 
 THEMECOLORS = {
@@ -22,7 +20,8 @@ THEMECOLORS = {
     'black': '#101010',
 }
 
-class GraphAnimator():
+
+class GraphAnimator:
     def __init__(self, graph, start_node, target_node,
                  is_maze=False, maze_list=[],
                  show_controls=True,
@@ -38,7 +37,6 @@ class GraphAnimator():
         self.show_edge_weight = show_edge_weight
         self.show_controls = show_controls
         self.show_datastructure = show_datastructure
-
 
     def get_edge_trace(self):
         edge_x = []
@@ -63,7 +61,6 @@ class GraphAnimator():
             text="5")
 
         return edge_trace
-
 
     def get_node_trace(self, color):
         node_x = []
@@ -90,7 +87,6 @@ class GraphAnimator():
             elif c == 'black':
                 node_colors[idx] = THEMECOLORS['black']
                 node_text_colors[idx] = THEMECOLORS['blue']
-
 
         node_text = list(self.graph.nodes())
         node_trace = go.Scatter(
@@ -130,7 +126,7 @@ class GraphAnimator():
 
         path_trace = go.Scatter(
             x=edge_x, y=edge_y,
-            line=dict(width=3, color=THEMECOLORS['green']),  #'#33FF33'
+            line=dict(width=3, color=THEMECOLORS['green']),
             hoverinfo='none',
             mode='lines',
             showlegend=False)
@@ -210,7 +206,6 @@ class GraphAnimator():
                           color=node_text_colors))
 
         return node_storage_trace
-
 
     def add_frame(self, color, came_from, current_node, nodes_storage):
         edge_trace = self.get_edge_trace()
@@ -324,7 +319,7 @@ class GraphAnimator():
             "y": 0,
             "steps": []
         }
-        steps = list(range(8))
+
         for step in range(8):
             slider_step = {"args": [
                 [step],
@@ -335,7 +330,6 @@ class GraphAnimator():
                 "label": step,
                 "method": "animate"}
             sliders_dict["steps"].append(slider_step)
-
 
         fig.layout.sliders = [sliders_dict]
         fig.show()
@@ -396,7 +390,6 @@ class GraphAnimator():
                               "text": nodes_storage_trace.text,
                               "textfont": nodes_storage_trace.textfont,
                               }
-
 
         result_data = [edge_node, data_path, data_node]
         if self.show_datastructure:
@@ -536,7 +529,6 @@ class GraphAnimator():
 
                 fig_dict["layout"]["annotations"].extend(edge_annotations)
 
-
         # make data
         fig_dict["data"] = self.make_data_from_traces(0)
 
@@ -565,7 +557,6 @@ class GraphAnimator():
         for frame_num in range(len(self.frames)):
             frame = {"data": self.make_data_from_traces(frame_num),
                      "name": str(frame_num)}
-
 
             fig_dict["frames"].append(frame)
 
@@ -618,7 +609,6 @@ class GraphAnimator():
 
         return 0
 
-
     def make_animation(self):
         maze_trace = self.get_maze_trace()
         fig = go.Figure(
@@ -648,16 +638,6 @@ class GraphAnimator():
                            text="target", showarrow=False,
                            font=dict(family="arial", size=25, color="#FF8888")
                            )
-        if self.edge_weight:
-            for edge in self.edge_list:
-                x0, y0 = self.graph.nodes[edge[0]]['pos']
-                x1, y1 = self.graph.nodes[edge[1]]['pos']
-                w = edge[2]
-                fig.add_annotation(x=(x0+x1)/2+1,
-                                   y=(y0+y1)/2,
-                                   text=str(w), showarrow=False,
-                                   font=dict(family="arial", size=25, color="#DD0000")
-                                   )
 
         return fig
 
