@@ -1,11 +1,6 @@
-from math import sqrt
 from utils import generate_simple_graph, generate_maze_graph, print_path
-from data_structures import AbstractNodeStorageClass
-from data_structures import Stack
-from data_structures import Queue
-from data_structures import DijkstraQueue
-from data_structures import AStarQueue
-from graph_animation import GraphAnimator
+from data_structures import *
+from utils import GraphAnimator
 from networkx import Graph
 
 
@@ -78,10 +73,10 @@ def find_path(
 graph, start_node, target_node = generate_simple_graph()
 
 # Create helper class for pretty animations and make a first shot
-# graph_animator = GraphAnimator(graph, start_node, target_node, show_controls=True)
+graph_animator = GraphAnimator(graph, start_node, target_node, show_controls=True)
 
 # DFS on simple graph
-# find_path(graph, start_node, target_node, 'Stack', graph_animator)
+find_path(graph, start_node, target_node, 'Stack', graph_animator)
 
 # BFS on simple graph
 # find_path(graph, start_node, target_node, 'Queue', graph_animator)

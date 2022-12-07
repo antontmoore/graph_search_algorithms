@@ -20,8 +20,7 @@ THEMECOLORS = {
     'black': '#101010',
 }
 
-
-class GraphAnimator:
+class GraphAnimator():
     def __init__(self, graph, start_node, target_node,
                  is_maze=False, maze_list=[],
                  show_controls=True,

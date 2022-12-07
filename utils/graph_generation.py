@@ -45,7 +45,7 @@ def generate_simple_graph() -> nx.Graph:
     # with open("simple graph.json", "w") as outfile:
     #     outfile.write(json_object)
 
-    with open('graphs/simple graph.json', 'r') as openfile:
+    with open('utils/graphs/simple graph.json', 'r') as openfile:
         graph_info = json.load(openfile)
 
     graph = nx.Graph()
@@ -60,7 +60,7 @@ def generate_maze_graph():
     def str_to_int(lst):
         return list(map(int, lst))
 
-    input_file = open("graphs/maze.txt", "r")
+    input_file = open("utils/graphs/maze.txt", "r")
     input_from_file = input_file.readlines()
     maze_list = [str_to_int(x.rstrip().split()) for x in input_from_file]
 

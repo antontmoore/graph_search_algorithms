@@ -112,8 +112,9 @@ class AStarQueue(AbstractNodeStorageClass):
 
     def insert(self, element):
         heappush(self.nodes,
-                 (self.distances[element] + self.calc_heuristic(element), element))
-
+                 (self.distances[element] +
+                  self.calc_heuristic(element), element)
+                 )
 
     def is_empty(self):
         return len(self.nodes) == 0
