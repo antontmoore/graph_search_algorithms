@@ -1,5 +1,5 @@
 from utils import generate_simple_graph, generate_maze_graph, print_path
-from utils.data_structures import *
+from data_structures import *
 from utils import GraphAnimator
 from networkx import Graph
 
@@ -95,4 +95,4 @@ find_path(graph, start_node, target_node, 'Stack', graph_animator)
 # find_path(graph, start_node, target_node, 'DijkstraQueue', graph_animator)
 
 # A* algorithm on large graph
-# find_path(graph, start_node, target_node, 'AStarQueue', graph_animator)
+find_path(graph, start_node, target_node, 'AStarQueue', graph_animator)
