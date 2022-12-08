@@ -1,5 +1,6 @@
 import networkx as nx
 import json
+from pathlib import Path
 
 
 def generate_simple_graph() -> nx.Graph:
@@ -44,8 +45,8 @@ def generate_simple_graph() -> nx.Graph:
     #                           "edge_list": edge_list}, indent=4)
     # with open("simple graph.json", "w") as outfile:
     #     outfile.write(json_object)
-
-    with open('utils/graphs/simple graph.json', 'r') as openfile:
+    path_to_file = Path(__file__).parent / 'graphs/simple graph.json'
+    with open(path_to_file, 'r') as openfile:
         graph_info = json.load(openfile)
 
     graph = nx.Graph()
