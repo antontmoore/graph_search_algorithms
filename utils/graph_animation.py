@@ -1,8 +1,8 @@
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
-from data_structures import Stack
-from data_structures import DijkstraQueue
-from data_structures import AStarQueue
+from .data_structures import Stack
+from .data_structures import DijkstraQueue
+from .data_structures import AStarQueue
 import networkx as nx
 
 THEMECOLORS = {
