@@ -1,8 +1,5 @@
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
-from .data_structures import Stack
-from .data_structures import DijkstraQueue
-from .data_structures import AStarQueue
 import networkx as nx
 
 THEMECOLORS = {
@@ -150,7 +147,7 @@ class GraphAnimator():
 
     def get_contour_trace(self, nodes_storage):
 
-        if isinstance(nodes_storage, Stack):
+        if nodes_storage.__class__.__name__ == 'Stack':
             contour_x = [-1, -1, 1, 1]
             contour_y = [4.5, -0.5, -0.5, 4.5]
         else:
@@ -172,7 +169,8 @@ class GraphAnimator():
 
         y_coord = list(range(len(nodes_storage.nodes)))
         x_coord = [0] * len(nodes_storage.nodes)
-        if isinstance(nodes_storage, DijkstraQueue) or isinstance(nodes_storage, AStarQueue):
+        if nodes_storage.__class__.__name__ == 'DijkstraQueue' or \
+                nodes_storage.__class__.__name__ == 'AStarQueue':
             nodes = [node[1] for node in nodes_storage.nodes]
         else:
             nodes = nodes_storage.nodes
@@ -260,7 +258,7 @@ class GraphAnimator():
 
         # контур хранилища
         nodes_storage_name = str(type(nodes_storage)).split('.')[1].split('\'')[0]
-        if isinstance(nodes_storage, Stack):
+        if nodes_storage.__class__.__name__ == 'Stack':
             contour_x = [-1, -1, 1, 1]
             contour_y = [4.5, -0.5, -0.5, 4.5]
         else:
@@ -286,7 +284,7 @@ class GraphAnimator():
                            showarrow=False,
                            font=dict(size=25, color="#000000")
                            )
-        if isinstance(nodes_storage, Stack):
+        if nodes_storage.__class__.__name__ == 'Stack':
             fig.add_annotation(x=-0.5, y=4.5, ax=-0.5, ay=5., text="",
                                xref='x2', yref='y2', axref='x2', ayref='y2',
                                showarrow=True, arrowhead=3, arrowsize=2, arrowwidth=2, arrowcolor='black')
@@ -440,6 +438,7 @@ class GraphAnimator():
 
         # annotations
         nodes_storage_name = str(type(nodes_storage)).split('.')[1].split('\'')[0]
+        nodes_storage_name = nodes_storage.__class__.__name__
         storage_name = {"align": 'center',
                         "font": {"color": THEMECOLORS['dark-blue'], "size": 25},
                         "text": nodes_storage_name,
@@ -449,7 +448,7 @@ class GraphAnimator():
                         "xref": "x2", "yref": "y2"
                         }
         x_arrow, y_arrow, ax_arrow, ay_arrow = \
-            (-0.5, 4.5, -0.5, 5.3) if isinstance(nodes_storage, Stack) else (0.0, 5.0, 0.0, 5.8)
+            (-0.5, 4.5, -0.5, 5.3) if nodes_storage.__class__.__name__ == 'Stack' else (0.0, 5.0, 0.0, 5.8)
         arrow_in = {"arrowcolor": THEMECOLORS['dark-blue'],
                     "arrowhead": 2, "arrowsize": 1, "arrowwidth": 2,
                     "ax": ax_arrow, "ay": ay_arrow,
@@ -460,7 +459,7 @@ class GraphAnimator():
                     }
 
         x_arrow, y_arrow, ax_arrow, ay_arrow = \
-            (0.5, 5.3, 0.5, 4.5) if isinstance(nodes_storage, Stack) else (0.0, -1.8, 0.0, -1.0)
+            (0.5, 5.3, 0.5, 4.5) if nodes_storage.__class__.__name__ == 'Stack' else (0.0, -1.8, 0.0, -1.0)
         arrow_out = {"arrowcolor": THEMECOLORS['dark-blue'],
                      "arrowhead": 2, "arrowsize": 1, "arrowwidth": 2,
                      "ax": ax_arrow, "ay": ay_arrow,

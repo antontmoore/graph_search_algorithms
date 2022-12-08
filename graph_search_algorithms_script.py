@@ -1,5 +1,8 @@
 from utils import generate_simple_graph, generate_maze_graph, print_path
-from data_structures import *
+from utils.data_structures import Stack
+from utils.data_structures import Queue
+from utils.data_structures import DijkstraQueue
+from utils.data_structures import AStarQueue
 from utils import GraphAnimator
 from networkx import Graph
 
@@ -81,7 +84,7 @@ find_path(graph, start_node, target_node, 'Stack', graph_animator)
 # BFS on simple graph
 # find_path(graph, start_node, target_node, 'Queue', graph_animator)
 
-# Dijkstra algorithm on simple graph
+# # Dijkstra algorithm on simple graph
 # graph_animator = GraphAnimator(graph, start_node, target_node,
 #                                show_edge_weight=True, show_controls=True)
 # find_path(graph, start_node, target_node, 'DijkstraQueue', graph_animator)
@@ -95,4 +98,4 @@ find_path(graph, start_node, target_node, 'Stack', graph_animator)
 # find_path(graph, start_node, target_node, 'DijkstraQueue', graph_animator)
 
 # A* algorithm on large graph
-find_path(graph, start_node, target_node, 'AStarQueue', graph_animator)
+# find_path(graph, start_node, target_node, 'AStarQueue', graph_animator)
