@@ -86,10 +86,10 @@ find_path(graph, start_node, target_node, 'Stack', graph_animator)
 #                                show_edge_weight=True, show_controls=True)
 # find_path(graph, start_node, target_node, 'DijkstraQueue', graph_animator)
 
-graph, start_node, target_node, maze_list = generate_maze_graph()
-graph_animator = GraphAnimator(graph, start_node, target_node,
-                               is_maze=True, maze_list=maze_list,
-                               show_datastructure=False)
+# graph, start_node, target_node, maze_list = generate_maze_graph()
+# graph_animator = GraphAnimator(graph, start_node, target_node,
+#                                is_maze=True, maze_list=maze_list,
+#                                show_datastructure=False)
 
 # Dijkstra algorithm on large graph
 # find_path(graph, start_node, target_node, 'DijkstraQueue', graph_animator)
