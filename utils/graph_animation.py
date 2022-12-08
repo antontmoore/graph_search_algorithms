@@ -437,7 +437,6 @@ class GraphAnimator():
         fig_dict["layout"]["font_color"] = THEMECOLORS['blue']
 
         # annotations
-        nodes_storage_name = str(type(nodes_storage)).split('.')[1].split('\'')[0]
         nodes_storage_name = nodes_storage.__class__.__name__
         storage_name = {"align": 'center',
                         "font": {"color": THEMECOLORS['dark-blue'], "size": 25},
@@ -469,8 +468,8 @@ class GraphAnimator():
                      "showarrow": True,
                      }
 
-        start_node_text_coordinates = (-2., 9.) if self.is_maze else (17.5, 20.)
-        target_node_text_coordinates = (22., 4.) if self.is_maze else (2.5, -1.)
+        start_node_text_coordinates = (-2., 9.) if self.is_maze else (18., 20.)
+        target_node_text_coordinates = (22., 4.) if self.is_maze else (3., -1.)
         start_node_text = {"align": 'left',
                            "font": {"color": THEMECOLORS['light-blue'], "size": 25},
                            "text": "start",
