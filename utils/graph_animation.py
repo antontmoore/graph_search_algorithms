@@ -647,7 +647,7 @@ class GraphAnimator():
             layout=go.Layout(
                 xaxis=dict(showgrid=False, zeroline=False, showticklabels=False),
                 yaxis=dict(showgrid=False, zeroline=False, showticklabels=False),
-                plot_bgcolor='#1e1e55',
+                plot_bgcolor=THEMECOLORS['background'],
                 showlegend=False,
             )
         )
@@ -655,12 +655,12 @@ class GraphAnimator():
         fig.add_annotation(x=-2 if self.is_maze else 13,
                            y=9 if self.is_maze else 20,
                            text="start", showarrow=False,
-                           font=dict(family="arial", size=25, color="LightSeaGreen")
+                           font=dict(family="arial", size=25, color=THEMECOLORS['light-blue'])
                            )
         fig.add_annotation(x=22 if self.is_maze else -2,
                            y=4 if self.is_maze else 0,
                            text="target", showarrow=False,
-                           font=dict(family="arial", size=25, color="#FF8888")
+                           font=dict(family="arial", size=25, color=THEMECOLORS['green'])
                            )
 
         return fig
