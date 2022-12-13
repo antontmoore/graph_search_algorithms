@@ -1,18 +1,15 @@
-# Graph Search Algorithms
+# Depth-First Search, Breadth-First Search, Dijkstra's algorithm and A* are actually the same algorithm.
 
-В этом репозитории содержится рабочий [Jupyter-ноутбук](https://github.com/antontmur/graph_search_algorithms/blob/master/Graph%20Search%20Algorithms%20(rus).ipynb), который показывает на примерах, что алгоритмы поиска в графе:
-* Bread-First Search
-* Depth-First Search
-* Dijkstra Algorithm
-* A* algorithm
+Repository of source code for the article.
 
-являются одним и тем же алгоритмом обхода графа. Различие между ними состоит лишь в том, какую структуру данных мы используем для хранения ещё непосещённых, но уже встреченных нами узлов.
+:white_square_button: On Medium: Depth-First Search, Breadth-First Search, Dijkstra's algorithm and A* are actually the same algorithm.
 
-Это показывается на примере двух задач.
+:book: На хабре. Поиск в глубину, поиск в ширину, алгоритмы Дейкстры и А* — это один и тот же алгоритм.
 
-**Задача 1. Поиск пути в простом графе**
-![simple graph](/images/simple_graph.png)
+** Problem 1.
 
-
-**Задача 2. Поиск пути в лабиринте**
-![maze](/images/maze.png)
+|  | Algorithm | Animation |
+| ------------- |:-------------:|:-----:|
+| ![dfs on simple graph](/images/dfs_simple.png)| Depth-first search      |[animation link](https://antontmoore.github.io/graph_algorithms/dfs)|
+| ![bfs on simple graph](/images/bfs_simple.png)| Bread-first search      |[animation link](https://antontmoore.github.io/graph_algorithms/bfs)|
+| ![dfs on simple graph](/images/dijkstra_simple.png)| Dijkstra algorithm      |[animation link](https://antontmoore.github.io/graph_algorithms/dijkstra_simple)|
