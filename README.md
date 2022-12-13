@@ -4,9 +4,13 @@ Repository of source code for the article.
 
 Quick links:
 
-:white_square_button: On Medium: Depth-First Search, Breadth-First Search, Dijkstra's algorithm and A* are actually the same algorithm.
+:white_square_button: Article on Medium.
 
-:book: На хабре. [Поиск в глубину, поиск в ширину, алгоритмы Дейкстры и А* — это один и тот же алгоритм.](https://habr.com/ru/company/yandex_praktikum/blog/705178/)
+:book: [Статья на хабре (russian)](https://habr.com/ru/company/yandex_praktikum/blog/705178/)
+
+:blue_book: [Tutorial in google colab notebook (english)](https://colab.research.google.com/github/antontmoore/graph_search_algorithms/blob/master/Algorithms_on_graphs_Tutorial.ipynb)
+
+:notebook_with_decorative_cover: [Tutorial in google colab notebook (русский)](https://colab.research.google.com/github/antontmoore/graph_search_algorithms/blob/master/Algorithms_on_graphs_Tutorial_(rus).ipynb)
 
 Inside the article the one algorithm is written and using different data structures the different results are obtained.
 There are two problems solved.
