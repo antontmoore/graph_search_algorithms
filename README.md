@@ -4,7 +4,7 @@ Repository of source code for the article.
 
 Quick links:
 
-:white_square_button: Article on Medium.
+:white_square_button: [Article on Medium](https://medium.com/@anton.tmur/depth-first-search-breadth-first-search-dijkstras-algorithm-and-a-are-the-same-algorithm-15528f12f512?source=friends_link&sk=8fb27cfb782e11ee74b2e05f4b31f489)
 
 :book: [Статья на хабре (russian)](https://habr.com/ru/company/yandex_praktikum/blog/705178/)
 
